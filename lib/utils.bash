@@ -37,7 +37,7 @@ download_release() {
 	local version filename download_path url
 	version="$1"
 	filename="$2"
-    download_path="$3"
+	download_path="$3"
 
 	# Construct the dynamic URL based on the provided version, platform, and architecture.
 	url="$GH_REPO/releases/download/v${version}/${filename}"
