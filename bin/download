@@ -2,6 +2,22 @@
 
 set -euo pipefail
 
+# Determine the platform and architecture dynamically
+platform="$(uname)"
+case "${platform}" in
+"Linux") platform="Linux" ;;
+"Darwin") platform="Darwin" ;;
+*) fail "Unsupported platform: ${platform}" ;;
+esac
+
+architecture="$(uname -m)"
+case "${architecture}" in
+"x86_64") architecture="x86_64" ;;
+"arm64" | "aarch64") architecture="arm64" ;;
+"i386") architecture="i386" ;;
+*) fail "Unsupported architecture: ${architecture}" ;;
+esac
+
 current_script_path=${BASH_SOURCE[0]}
 plugin_dir=$(dirname "$(dirname "$current_script_path")")
 
@@ -10,13 +26,13 @@ source "${plugin_dir}/lib/utils.bash"
 
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
-# TODO: Adapt this to proper extension and adapt extracting strategy.
-release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
+# Set the release file based on the dynamic platform, architecture, and version.
+release_file="$ASDF_DOWNLOAD_PATH/${TOOL_NAME}_${ASDF_INSTALL_VERSION}_${platform}_${architecture}.tar.gz"
 
 # Download tar.gz file to the download directory
 download_release "$ASDF_INSTALL_VERSION" "$release_file"
 
-#  Extract contents of tar.gz file into the download directory
+# Extract contents of tar.gz file into the download directory
 tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
 
 # Remove the tar.gz file since we don't need to keep it
