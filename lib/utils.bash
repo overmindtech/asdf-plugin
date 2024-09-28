@@ -34,15 +34,16 @@ list_all_versions() {
 }
 
 download_release() {
-	local version filename url
+	local version filename download_path url
 	version="$1"
 	filename="$2"
+    download_path="$3"
 
 	# Construct the dynamic URL based on the provided version, platform, and architecture.
 	url="$GH_REPO/releases/download/v${version}/${filename}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	curl "${curl_opts[@]}" -o "$download_path" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
