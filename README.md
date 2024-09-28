@@ -18,8 +18,6 @@
 Plugin:
 
 ```shell
-asdf plugin add overmind-cli
-# or
 asdf plugin add overmind-cli https://github.com/overmindtech/asdf-overmind-cli.git
 ```
 
